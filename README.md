@@ -27,24 +27,32 @@ Buka [http://localhost:3000](http://localhost:3000).
 
 ## Setup Supabase (backend)
 
+> **Project baru / mulai dari nol?** Cukup jalankan **satu file**:
+> `supabase/00_full_schema.sql`. File ini sudah menggabungkan semua
+> tabel, RLS, sistem role/admin, bucket Storage, dan seed data struktur
+> organisasi RISPI — tidak perlu file lain. File-file SQL lama ada di
+> `supabase/archive/` cuma untuk riwayat, tidak perlu dijalankan lagi.
+
 1. Buat project di [supabase.com](https://supabase.com).
-2. Buka **SQL Editor**, jalankan isi file `supabase/schema.sql` (bikin
-   semua tabel + aturan keamanan/RLS sekaligus).
-3. Jalankan juga `supabase/add_calendar_table.sql` (tabel khusus untuk
-   Kalender Kegiatan).
-4. Buka **Storage**, buat bucket baru bernama `media`, centang
-   **Public bucket**.
-5. Buka **Authentication → Users → Add User**, buat akun untuk tiap admin
-   (email + password).
-6. Daftarkan akun itu sebagai admin lewat SQL Editor:
+2. Buka **SQL Editor → New Query**, paste seluruh isi
+   `supabase/00_full_schema.sql`, klik **Run**. Ini otomatis membuat
+   semua tabel, RLS, fungsi role, dan bucket Storage `media` (sudah
+   public, tidak perlu diatur manual lagi).
+3. Buka **Authentication → Users → Add User**, buat akun untuk dirimu
+   sendiri (email + password, centang **Auto Confirm User**).
+4. Jadikan akun itu Super Admin pertama lewat SQL Editor:
    ```sql
-   insert into admins (id, email, name)
-   select id, email, 'Nama Admin'
+   insert into admins (id, email, name, role, is_active)
+   select id, email, split_part(email,'@',1), 'super_admin', true
    from auth.users
-   where email = 'admin@contoh.com';
+   where email = 'email-kamu@contoh.com';
    ```
-7. Buka **Project Settings → API**, salin **Project URL** dan
-   **anon public key**.
+   Admin/Super Admin berikutnya bisa ditambah langsung lewat halaman
+   `/admin/admins` di website (tidak perlu SQL lagi), asal orangnya
+   sudah punya akun (langkah 3) lebih dulu.
+5. Buka **Project Settings → API**, salin **Project URL** dan
+   **anon public key**, masukkan ke `.env.local` (lihat bagian di
+   bawah).
 
 ## Environment variables
 
@@ -212,3 +220,39 @@ Super Admin aktif — bukan cuma mengandalkan frontend.
   admin baru harus dibuat manual dulu di dashboard Supabase sebelum
   bisa "diundang" di `/admin/admins`, karena membuat user Auth baru
   butuh service role key yang tidak aman dipakai di sisi browser.
+
+## Lupa Password Admin
+
+- Halaman `/login` sekarang punya tautan **"Lupa password?"** — admin
+  masukkan email, dapat link reset lewat email.
+- Link itu membawa mereka ke `/reset-password`, tempat mereka benar-benar
+  mengetik password baru (bukan cuma auto-login tanpa bisa apa-apa).
+
+### PENTING — supaya link reset tidak mengarah ke localhost
+
+Di dashboard Supabase → **Authentication → URL Configuration**:
+1. Ganti **Site URL** dari `http://localhost:3000` ke domain Vercel kamu
+   (mis. `https://nama-project.vercel.app`).
+2. Tambahkan domain itu juga ke **Redirect URLs** (boleh pakai wildcard,
+   mis. `https://nama-project.vercel.app/**`).
+
+Tanpa langkah ini, semua link dari email Supabase (reset password, dll)
+akan selalu mengarah ke localhost, bukan ke situs live.
+
+### Kalau Super Admin ingin reset password admin lain secara manual
+
+Tidak perlu lewat email — buka Supabase → Authentication → Users → klik
+user yang dimaksud → ada opsi untuk set password baru langsung dari
+situ.
+
+## Blokir Klik Kanan & Ctrl+U
+
+`components/SecurityGuard.js` mem-blokir klik kanan (context menu) dan
+Ctrl+U (lihat source) di seluruh halaman. **Catatan jujur:** ini cuma
+penghalang ringan untuk pengunjung awam — bukan keamanan sesungguhnya.
+Orang yang tahu masih bisa buka DevTools lewat menu browser (bukan
+shortcut) atau cara lain. Data yang benar-benar sensitif tetap
+dilindungi lewat Supabase RLS (Row Level Security) yang sudah berjalan
+di seluruh tabel, bukan lewat trik di sisi browser ini.
+
+Tidak ada migrasi SQL untuk fitur ini — murni perilaku di sisi browser.

@@ -1,6 +1,7 @@
 import "./globals.css";
 import { AdminProvider } from "../hooks/useAdmin";
 import AdminBar from "../components/AdminBar";
+import SecurityGuard from "../components/SecurityGuard";
 
 export const metadata = {
   title: "UKK RISPI — UIN Ar-Raniry",
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <SecurityGuard />
         <AdminProvider>
           <AdminBar />
           {children}

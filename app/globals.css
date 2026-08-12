@@ -627,6 +627,14 @@ html { scroll-behavior: smooth; }
 }
 .login-card input:focus{ outline:none; border-color: var(--navy-soft); }
 .login-error{ font-size:13px; color: var(--red-dark); }
+.login-notice{
+  font-size:13px; color:#15803d; background: rgba(74,222,128,0.12);
+  padding:10px 12px; border-radius:4px;
+}
+.login-back-link{
+  background:none; border:none; color: var(--ink-muted); font-size:13px;
+  text-decoration:underline; cursor:pointer; padding:0; margin-top:4px; text-align:left;
+}
 .login-card .btn-primary{ margin-top:6px; border:none; cursor:pointer; }
 .login-card .btn-primary:disabled{ opacity:0.6; cursor:default; }
 
