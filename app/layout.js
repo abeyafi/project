@@ -33,10 +33,9 @@ export const metadata = {
     index: true,
     follow: true,
   },
-  icons: {
-    icon: "/logo-rispi.png",
-    apple: "/logo-rispi.png",
-  },
+  // Favicon & apple-touch-icon otomatis dipakai Next.js dari
+  // app/icon.png dan app/apple-icon.png -- tidak perlu didaftarkan
+  // manual di sini.
   openGraph: {
     type: "website",
     locale: "id_ID",
