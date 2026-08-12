@@ -380,3 +380,44 @@ serupa di bagian lain.
 Sekalian dirapikan: padding kartu Bidang & Pengurus Inti sedikit
 dikecilkan khusus di layar sangat sempit (di bawah 560px) supaya
 tidak terlalu mepet.
+
+## Struktur Navbar Baru + Dropdown "Lainnya"
+
+Navbar sekarang: **Beranda, Visi Misi, Tentang, Kalender, Divisi, Kontak**
+sebagai menu utama, plus dropdown **Lainnya ▾** berisi BSO, Galeri,
+Prestasi, Publikasi, Berita.
+
+**Penting soal arsitektur:** ini murni reorganisasi tampilan navbar.
+Section BSO/Galeri/Prestasi/Publikasi tetap section di halaman beranda
+yang sama seperti sebelumnya (bukan halaman terpisah) — dropdown-nya
+tetap mengarah ke anchor `/#bso`, `/#galeri`, dst, kecuali Berita yang
+memang sudah punya halaman sendiri (`/berita`). Tidak ada halaman yang
+dihapus atau dipindah.
+
+- Dropdown desktop: klik "Lainnya" untuk buka/tutup (bukan cuma hover,
+  supaya juga jalan di layar sentuh/tablet), tertutup otomatis kalau
+  klik di luar area dropdown atau pilih salah satu link. Posisi rata
+  kanan supaya tidak pernah keluar dari tepi layar.
+- Mobile: semua 11 menu (6 utama + 5 "Lainnya") tampil sebagai satu
+  daftar di drawer, dengan label kecil "LAINNYA" memisahkan dua
+  kelompok itu.
+
+### Bug "blank space" mobile → desktop — akar masalah & perbaikan
+
+Akar masalahnya: state `open` (drawer mobile terbuka/tertutup) di
+React tidak ikut ter-reset kalau layar di-resize dari mobile balik ke
+desktop — jadi kalau menu sempat dibuka di HP lalu jendela browser
+dilebarkan, elemen drawer bisa meninggalkan sisa ruang. Diperbaiki
+dengan `window.matchMedia` yang memantau breakpoint secara langsung
+dan otomatis menutup drawer + dropdown begitu layar melewati batas
+desktop — bukan cuma ditambal lewat CSS.
+
+## Halaman Kontak
+
+Diprioritaskan ulang jadi tiga informasi utama sesuai permintaan:
+**Instagram → Alamat → Email**. Field "Kerja sama" (nomor WA) tetap
+ada di bawahnya (tidak dihapus, cuma tidak lagi jadi prioritas utama).
+
+**Migrasi baru**: jalankan `supabase/add_kontak_email.sql` — menambah
+kolom `email` (default `ukkrispi@ar-raniry.ac.id`, sesuaikan lewat
+tombol edit di halaman Kontak kalau perlu diganti).

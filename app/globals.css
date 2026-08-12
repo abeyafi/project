@@ -60,7 +60,7 @@
   .brand-mark img{ width:100%; height:100%; object-fit:cover; }
   .brand-text{ font-family: var(--font-serif); font-weight:600; font-size:17px; color: var(--navy); letter-spacing:0.01em; }
   .brand-sub{ font-family: var(--font-mono); font-size:10px; color: var(--ink-muted); letter-spacing:0.06em; text-transform:uppercase; }
-  nav.links{ display:flex; gap:34px; }
+  nav.links{ display:flex; align-items:center; gap:34px; }
   nav.links a{
     font-size:14px; font-weight:500; color: var(--ink-muted);
     padding-bottom:4px; border-bottom:2px solid transparent;
@@ -68,6 +68,38 @@
   }
   nav.links a.active, nav.links a:hover{ color: var(--navy); border-color: var(--red); }
   .nav-right{ display:flex; align-items:center; gap:18px; }
+
+  /* ===== Dropdown "Lainnya" (desktop) ===== */
+  .nav-dropdown{ position:relative; }
+  .nav-dropdown-trigger{
+    display:flex; align-items:center; gap:5px;
+    background:none; border:none; cursor:pointer;
+    font-family: var(--font-sans); font-size:14px; font-weight:500; color: var(--ink-muted);
+    padding-bottom:4px; border-bottom:2px solid transparent;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .nav-dropdown-trigger:hover, .nav-dropdown-trigger.active{ color: var(--navy); border-color: var(--red); }
+  .nav-dropdown-caret{ font-size:10px; transition: transform .2s ease; display:inline-block; }
+  .nav-dropdown-caret.is-open{ transform: rotate(180deg); }
+  .nav-dropdown-menu{
+    position:absolute; top:calc(100% + 14px); right:0;
+    background: var(--white); border:1px solid var(--hairline); border-radius:4px;
+    box-shadow: 0 12px 32px rgba(11,31,58,0.14);
+    min-width:180px; padding:8px; display:flex; flex-direction:column; gap:2px;
+    opacity:0; visibility:hidden; transform:translateY(-6px);
+    transition: opacity .16s ease, transform .16s ease, visibility .16s;
+    z-index:60;
+  }
+  .nav-dropdown-menu.is-open{
+    opacity:1; visibility:visible; transform:translateY(0);
+  }
+  .nav-dropdown-menu a{
+    font-size:14px; font-weight:500; color: var(--ink); padding:9px 12px;
+    border-radius:2px; border-bottom:none !important;
+  }
+  .nav-dropdown-menu a:hover, .nav-dropdown-menu a.active{
+    background: var(--paper); color: var(--red-dark);
+  }
 
   /* ===== Burger ===== */
   .burger{
@@ -100,6 +132,10 @@
     border-bottom:1px solid var(--hairline);
   }
   .mobile-panel a.active{ color: var(--red); }
+  .mobile-panel-divider{
+    font-family: var(--font-mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color: var(--ink-muted); padding:16px 0 4px;
+  }
 
   /* ===== Hero ===== */
   section.hero{

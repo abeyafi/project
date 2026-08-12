@@ -44,33 +44,6 @@ export default function Kontak() {
         <div className="kontak-grid">
           <div className="kontak-card reveal">
             <div className="kontak-row">
-              <div className="kontak-icon">@</div>
-              <div>
-                <div className="kontak-label">Alamat</div>
-                <EditableText
-                  as="div"
-                  className="kontak-value"
-                  value={data.alamat}
-                  isAdmin={isAdmin}
-                  multiline
-                  onSave={(v) => updateField("alamat", v)}
-                />
-              </div>
-            </div>
-            <div className="kontak-row">
-              <div className="kontak-icon">wa</div>
-              <div>
-                <div className="kontak-label">Kerja sama</div>
-                <EditableText
-                  as="div"
-                  className="kontak-value"
-                  value={data.kerja_sama}
-                  isAdmin={isAdmin}
-                  onSave={(v) => updateField("kerja_sama", v)}
-                />
-              </div>
-            </div>
-            <div className="kontak-row">
               <div className="kontak-icon">ig</div>
               <div>
                 <div className="kontak-label">Instagram</div>
@@ -92,6 +65,53 @@ export default function Kontak() {
                     {data.instagram}
                   </a>
                 )}
+              </div>
+            </div>
+            <div className="kontak-row">
+              <div className="kontak-icon">@</div>
+              <div>
+                <div className="kontak-label">Alamat</div>
+                <EditableText
+                  as="div"
+                  className="kontak-value"
+                  value={data.alamat}
+                  isAdmin={isAdmin}
+                  multiline
+                  onSave={(v) => updateField("alamat", v)}
+                />
+              </div>
+            </div>
+            <div className="kontak-row">
+              <div className="kontak-icon">@</div>
+              <div>
+                <div className="kontak-label">Email</div>
+                {isAdmin ? (
+                  <EditableText
+                    as="div"
+                    className="kontak-value"
+                    value={data.email}
+                    isAdmin={isAdmin}
+                    placeholder="(isi email resmi)"
+                    onSave={(v) => updateField("email", v)}
+                  />
+                ) : (
+                  <a className="kontak-value kontak-link" href={`mailto:${data.email || ""}`}>
+                    {data.email || "(belum diisi)"}
+                  </a>
+                )}
+              </div>
+            </div>
+            <div className="kontak-row">
+              <div className="kontak-icon">wa</div>
+              <div>
+                <div className="kontak-label">Kerja sama</div>
+                <EditableText
+                  as="div"
+                  className="kontak-value"
+                  value={data.kerja_sama}
+                  isAdmin={isAdmin}
+                  onSave={(v) => updateField("kerja_sama", v)}
+                />
               </div>
             </div>
           </div>
