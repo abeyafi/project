@@ -6,6 +6,7 @@ import { useAdmin } from "../hooks/useAdmin";
 import EditableText from "./EditableText";
 import EditablePhoto from "./EditablePhoto";
 import Lightbox from "./Lightbox";
+import SectionSkeleton from "./SectionSkeleton";
 
 export default function Galeri() {
   const { isAdmin } = useAdmin();
@@ -48,7 +49,7 @@ export default function Galeri() {
     setItems((prev) => prev.filter((it) => it.id !== id));
   }
 
-  if (loading) return null;
+  if (loading) return <SectionSkeleton theme="paper" minHeight={520} />;
 
   return (
     <section className="galeri" id="galeri">

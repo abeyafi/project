@@ -57,30 +57,32 @@ export default function ActivityLogPage() {
       ) : filtered.length === 0 ? (
         <p className="admin-empty-note">Tidak ada aktivitas untuk filter ini.</p>
       ) : (
-        <table className="admin-log-table">
-          <thead>
-            <tr>
-              <th>Waktu</th>
-              <th>Admin</th>
-              <th>Aksi</th>
-              <th>Jenis konten</th>
-              <th>Deskripsi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((log) => (
-              <tr key={log.id}>
-                <td>{new Date(log.created_at).toLocaleString("id-ID")}</td>
-                <td>{log.actor_email}</td>
-                <td>
-                  <span className="admin-action-badge">{log.action}</span>
-                </td>
-                <td>{log.entity_type}</td>
-                <td>{log.description}</td>
+        <div className="admin-list-table-wrap">
+          <table className="admin-log-table">
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>Admin</th>
+                <th>Aksi</th>
+                <th>Jenis konten</th>
+                <th>Deskripsi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filtered.map((log) => (
+                <tr key={log.id}>
+                  <td>{new Date(log.created_at).toLocaleString("id-ID")}</td>
+                  <td>{log.actor_email}</td>
+                  <td>
+                    <span className="admin-action-badge">{log.action}</span>
+                  </td>
+                  <td>{log.entity_type}</td>
+                  <td>{log.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

@@ -256,3 +256,112 @@ dilindungi lewat Supabase RLS (Row Level Security) yang sudah berjalan
 di seluruh tabel, bukan lewat trik di sisi browser ini.
 
 Tidak ada migrasi SQL untuk fitur ini — murni perilaku di sisi browser.
+
+## Pengamanan website
+
+### Yang sudah diterapkan di kode
+
+- **SQL Injection**: sudah aman secara arsitektur — semua query lewat
+  Supabase JS client (`supabase.from(...).select/insert/update()`),
+  yang otomatis memakai parameterized query, bukan penggabungan string
+  SQL mentah. Tidak ada satu pun tempat di kode ini yang menyusun SQL
+  dari input pengguna secara langsung.
+- **XSS**: React otomatis meng-escape semua teks yang ditampilkan.
+  Sudah dicek — tidak ada satu pun pemakaian `dangerouslySetInnerHTML`
+  di seluruh kode.
+- **Upload file berbahaya ("malware")**: sekarang dicek dua lapis —
+  di browser (tipe file & ukuran maks 8MB, lihat `EditablePhoto.js`)
+  DAN di server lewat pembatasan bucket Storage Supabase
+  (`allowed_mime_types` + `file_size_limit`, lihat
+  `supabase/harden_storage_bucket.sql` — sudah otomatis termasuk juga
+  di `00_full_schema.sql` untuk project baru). Lapis server ini yang
+  sebenarnya tidak bisa dilewati.
+- **Brute-force login**: form login mengunci diri 30 detik setelah 5
+  kali gagal login berturut-turut. Ini penangkal ringan di sisi
+  browser — Supabase sendiri juga sudah menerapkan rate limit di
+  levelnya (pernah kejadian "email rate limit exceeded" sebelumnya).
+- **HTTP security headers** (`next.config.js`): `X-Frame-Options`
+  (anti clickjacking), `X-Content-Type-Options` (anti MIME-sniffing),
+  `Referrer-Policy`, `Permissions-Policy` (matikan akses kamera/mic/
+  lokasi yang memang tidak dipakai situs ini).
+
+### Jalankan ini di Supabase (kalau pakai project yang sudah ada)
+
+`supabase/harden_storage_bucket.sql` — membatasi bucket `media` cuma
+terima gambar, maks 8MB per file.
+
+### Yang TIDAK saya buat (dan alasannya)
+
+- **DDoS**: ini pertahanan di level infrastruktur, bukan kode aplikasi.
+  Vercel dan Supabase sudah punya mitigasi bawaan di layer mereka
+  untuk trafik serangan skala besar. Yang bisa kamu aktifkan sendiri:
+  Vercel → Settings → cek fitur firewall/attack challenge kalau
+  tersedia di paketmu, dan Supabase → Settings → Database → cek
+  connection pooling & rate limit Auth (sudah aktif secara default).
+- **Content-Security-Policy (CSP)**: header ini powerful tapi berisiko
+  tinggi salah konfigurasi — bisa diam-diam memblokir Google Fonts atau
+  gambar dari Supabase Storage tanpa error yang jelas. Saya sengaja
+  tidak pasang tanpa bisa menguji langsung ke Supabase live kamu dari
+  sini. Kalau mau saya pasang, saya perlu kamu bantu tes setelah
+  deploy untuk pastikan tidak ada yang patah.
+- **Antivirus/malware scanning file upload**: di luar kemampuan
+  stack ini tanpa layanan pihak ketiga berbayar (mis. Cloudmersive,
+  VirusTotal API). Pembatasan tipe & ukuran file yang sudah ada
+  menutup celah paling umum (upload script/executable menyamar
+  sebagai gambar).
+
+## SEO
+
+- Metadata lengkap di `app/layout.js`: title template, description,
+  keywords, Open Graph, Twitter Card, canonical URL, dan JSON-LD
+  Organization schema.
+- `/robots.txt` dan `/sitemap.xml` di-generate otomatis (`app/robots.js`,
+  `app/sitemap.js`) — sitemap ikut memuat semua artikel Berita yang
+  sudah published, dan selalu ambil data terbaru (tidak perlu redeploy
+  tiap ada artikel baru).
+- Setiap artikel Berita (`/berita/[slug]`) sekarang punya title,
+  description, dan gambar Open Graph **sendiri-sendiri** (bukan lagi
+  judul generik yang sama untuk semua halaman) — penting untuk hasil
+  pencarian Google dan tampilan preview saat link artikel dibagikan
+  ke WhatsApp/media sosial.
+- **Set `NEXT_PUBLIC_SITE_URL`** di environment variables (sama seperti
+  dua variabel Supabase) begitu domain final sudah ada — dipakai untuk
+  URL kanonik, sitemap, dan link Open Graph. Sebelum itu diisi, situs
+  tetap jalan normal dengan URL placeholder.
+
+## Perbaikan tampilan responsif (audit menyeluruh)
+
+Dicek ulang semua grid/layout di seluruh halaman untuk desktop, tablet,
+dan mobile. Bug yang ditemukan dan diperbaiki:
+
+- Tabel Activity Log (`/admin/activity-log`) belum punya pembungkus
+  scroll horizontal — di HP, tabel 5 kolom itu bisa merusak lebar
+  halaman. Sekarang dibungkus sama seperti tabel di `/admin/admins`.
+- Baris tabel Prestasi versi admin (`.ledger-row.admin-row`, yang
+  punya kolom tambahan tombol Hapus) **tidak ikut menyusut ke 1 kolom**
+  di HP walau baris biasa sudah benar — ini murni soal specificity CSS
+  (aturan yang lebih spesifik menang walau ada di dalam media query
+  mobile). Sudah diperbaiki.
+- Bar status admin di bagian paling atas (`Mode admin aktif — email`)
+  berisiko meluber ke samping di HP kalau emailnya panjang. Sekarang
+  email dipotong dengan "..." kalau kepanjangan, dan di layar sangat
+  sempit pindah baris sendiri.
+- Statistik di Hero (50+ / 12 / 4) sedikit dirapatkan jaraknya di HP
+  supaya tidak terlalu mepet ke tepi layar.
+
+## Peningkatan UI/UX
+
+- **Logo UIN diganti** dengan versi resmi terbaru (dibersihkan dari
+  latar abu-abu, transparan, siap pakai).
+- **Loading state yang lebih halus**: 7 section (Visi Misi, Divisi,
+  Kalender, Prestasi, Galeri, Publikasi, Kontak) sebelumnya langsung
+  "meloncat" dari kosong ke penuh begitu data dari Supabase selesai
+  dimuat — bikin halaman terasa "lompat-lompat" sesaat setelah dibuka.
+  Sekarang ada indikator loading bergaya garis merah bergerak
+  (`SectionSkeleton.js`) yang mengisi ruang section itu selagi
+  menunggu, jadi transisinya mulus.
+- **Aksesibilitas keyboard**: sebelumnya nyaris tidak ada indikator
+  visual saat elemen (tombol, link, input) di-fokus pakai keyboard
+  (Tab). Sekarang semua elemen interaktif dapat garis fokus merah yang
+  jelas saat dinavigasi pakai keyboard — penting untuk pengguna yang
+  tidak pakai mouse/trackpad, dan juga standar praktik profesional.

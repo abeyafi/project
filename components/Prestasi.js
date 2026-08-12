@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useAdmin } from "../hooks/useAdmin";
 import EditableText from "./EditableText";
+import SectionSkeleton from "./SectionSkeleton";
 
 const RANK_CLASSES = ["gold", "silver", "outline"];
 
@@ -61,7 +62,7 @@ export default function Prestasi() {
     setRows((prev) => prev.filter((r) => r.id !== id));
   }
 
-  if (loading) return null;
+  if (loading) return <SectionSkeleton theme="paper" minHeight={420} />;
 
   return (
     <section className="prestasi" id="prestasi">

@@ -23,10 +23,30 @@ export default function EditablePhoto({
   const [uploading, setUploading] = useState(false);
   const [pendingFile, setPendingFile] = useState(null);
 
+  const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+  const MAX_SIZE_BYTES = 8 * 1024 * 1024; // 8MB
+
   function handlePick(e) {
     const file = e.target.files?.[0];
     e.target.value = ""; // supaya pilih file yang sama lagi tetap trigger onChange
     if (!file) return;
+
+    // Validasi nyata di sisi klien — `accept="image/*"` di elemen input
+    // cuma saran tampilan file picker, bukan proteksi. Ini cek isi
+    // MIME type file yang sebenarnya dipilih, sebelum diproses lebih
+    // lanjut. Batasan tegas (tipe & ukuran file) juga ditegakkan di
+    // level bucket Storage Supabase — lihat 00_full_schema.sql — jadi
+    // seseorang yang mem-bypass pengecekan ini dari luar app tetap
+    // ditolak oleh server.
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      alert("File harus berupa gambar (JPG, PNG, WEBP, atau GIF).");
+      return;
+    }
+    if (file.size > MAX_SIZE_BYTES) {
+      alert("Ukuran file maksimal 8MB.");
+      return;
+    }
+
     setPendingFile(file);
   }
 

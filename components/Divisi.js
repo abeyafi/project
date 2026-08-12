@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabaseClient";
 import { useAdmin } from "../hooks/useAdmin";
 import EditableText from "./EditableText";
 import EditablePhoto from "./EditablePhoto";
+import SectionSkeleton from "./SectionSkeleton";
 
 export default function Divisi() {
   const { isAdmin } = useAdmin();
@@ -85,7 +86,7 @@ export default function Divisi() {
     }));
   }
 
-  if (loading) return null;
+  if (loading) return <SectionSkeleton theme="paper" minHeight={640} />;
 
   return (
     <section className="divisi" id="divisi">

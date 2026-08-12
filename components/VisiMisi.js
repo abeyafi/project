@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useAdmin } from "../hooks/useAdmin";
 import EditableText from "./EditableText";
+import SectionSkeleton from "./SectionSkeleton";
 
 export default function VisiMisi() {
   const { isAdmin } = useAdmin();
@@ -27,7 +28,7 @@ export default function VisiMisi() {
     setData((prev) => ({ ...prev, [field]: value }));
   }
 
-  if (!data) return null;
+  if (!data) return <SectionSkeleton theme="paper" minHeight={280} />;
 
   return (
     <section className="visimisi" id="visimisi">

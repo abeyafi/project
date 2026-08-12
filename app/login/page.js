@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabaseClient";
 
@@ -11,10 +11,23 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [failCount, setFailCount] = useState(0);
+  const [lockedUntil, setLockedUntil] = useState(0);
   const router = useRouter();
+
+  const [, setTick] = useState(0);
+  const isLocked = lockedUntil > Date.now();
+  const lockSecondsLeft = Math.ceil((lockedUntil - Date.now()) / 1000);
+
+  useEffect(() => {
+    if (!isLocked) return;
+    const id = setInterval(() => setTick((t) => t + 1), 1000);
+    return () => clearInterval(id);
+  }, [isLocked]);
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (isLocked) return;
     setError("");
     setLoading(true);
     const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -33,8 +46,22 @@ export default function LoginPage() {
       } else {
         setError(msg || "Gagal masuk. Coba lagi.");
       }
+
+      // Penangkal brute-force ringan di sisi klien: setelah 5 kali gagal
+      // beruntun, kunci form 30 detik. Ini bukan pengganti proteksi di
+      // server — Supabase sendiri sudah menerapkan rate limit di
+      // levelnya — tapi memperlambat percobaan tebak-password otomatis.
+      setFailCount((prev) => {
+        const next = prev + 1;
+        if (next >= 5) {
+          setLockedUntil(Date.now() + 30000);
+          return 0;
+        }
+        return next;
+      });
       return;
     }
+    setFailCount(0);
     router.push("/");
   }
 
@@ -127,8 +154,13 @@ export default function LoginPage() {
           />
         </label>
         {error && <div className="login-error">{error}</div>}
-        <button type="submit" className="btn-primary" disabled={loading}>
-          {loading ? "Memproses..." : "Masuk"}
+        {isLocked && (
+          <div className="login-error">
+            Terlalu banyak percobaan gagal. Coba lagi dalam {lockSecondsLeft} detik.
+          </div>
+        )}
+        <button type="submit" className="btn-primary" disabled={loading || isLocked}>
+          {loading ? "Memproses..." : isLocked ? `Coba lagi (${lockSecondsLeft}s)` : "Masuk"}
         </button>
         <button
           type="button"

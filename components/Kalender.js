@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabaseClient";
 import { useAdmin } from "../hooks/useAdmin";
 import EditableText from "./EditableText";
 import { monthNames, weekdayLabels } from "../data/events";
+import SectionSkeleton from "./SectionSkeleton";
 
 function keyFor(year, month, day) {
   return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -23,6 +24,18 @@ export default function Kalender() {
   const [selectedKey, setSelectedKey] = useState(null);
   const [events, setEvents] = useState({});
   const [loading, setLoading] = useState(true);
+  const [today, setToday] = useState(() => todayKey());
+
+  // Kalau tab ini dibiarkan terbuka lewat tengah malam, "hari ini" harus
+  // ikut berpindah otomatis tanpa perlu admin ganti bulan atau reload.
+  // Dicek tiap menit — ringan, dan cukup untuk menangkap pergantian hari.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const fresh = todayKey();
+      setToday((prev) => (prev === fresh ? prev : fresh));
+    }, 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   async function load() {
     const { data } = await supabase.from("calendar_events").select("*");
@@ -45,7 +58,6 @@ export default function Kalender() {
     for (let i = 0; i < firstWeekday; i++) {
       list.push({ empty: true, key: `empty-${i}` });
     }
-    const tKey = todayKey();
     for (let d = 1; d <= daysInMonth; d++) {
       const key = keyFor(calYear, calMonth, d);
       list.push({
@@ -53,11 +65,11 @@ export default function Kalender() {
         key,
         day: d,
         hasEvent: Boolean(events[key]),
-        isToday: key === tKey,
+        isToday: key === today,
       });
     }
     return list;
-  }, [calYear, calMonth, events]);
+  }, [calYear, calMonth, events, today]);
 
   const goPrev = () => {
     setCalMonth((m) => {
@@ -115,7 +127,7 @@ export default function Kalender() {
     });
   }
 
-  if (loading) return null;
+  if (loading) return <SectionSkeleton theme="paper" minHeight={520} />;
 
   const selectedEvent = selectedKey ? events[selectedKey] : null;
   const selectedDateLabel = selectedKey

@@ -421,9 +421,15 @@ create policy "admin read activity_logs" on activity_logs for select
 -- ================================================================
 -- 14. STORAGE — bucket "media" + kebijakan aksesnya
 -- ================================================================
-insert into storage.buckets (id, name, public)
-  values ('media', 'media', true)
-  on conflict (id) do nothing;
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+  values (
+    'media', 'media', true,
+    8388608, -- 8MB
+    array['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+  )
+  on conflict (id) do update
+    set file_size_limit = 8388608,
+        allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
 drop policy if exists "public read media" on storage.objects;
 create policy "public read media" on storage.objects for select

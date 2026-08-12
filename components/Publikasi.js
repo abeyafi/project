@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabaseClient";
 import { useAdmin } from "../hooks/useAdmin";
 import EditableText from "./EditableText";
 import { logActivity } from "../lib/activityLog";
+import SectionSkeleton from "./SectionSkeleton";
 
 export default function Publikasi() {
   const { isAdmin } = useAdmin();
@@ -70,7 +71,7 @@ export default function Publikasi() {
     setRows((prev) => prev.filter((r) => r.id !== id));
   }
 
-  if (loading) return null;
+  if (loading) return <SectionSkeleton theme="navy" minHeight={480} />;
 
   return (
     <section className="publikasi" id="publikasi">
