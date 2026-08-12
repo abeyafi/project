@@ -22,7 +22,7 @@ export default function Footer() {
         </div>
         <div className="footer-col">
           <div className="footer-col-title">Sosial media</div>
-          <a href="#">Instagram</a>
+          <a href="https://www.instagram.com/ukkrispi" target="_blank" rel="noreferrer">Instagram</a>
           <a href="#">LinkedIn</a>
           <a href="#">YouTube</a>
         </div>

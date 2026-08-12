@@ -91,7 +91,9 @@
     border-bottom: 1px solid var(--hairline);
     transition: max-height .32s ease;
   }
-  .mobile-panel.is-open{ max-height:420px; }
+  .mobile-panel.is-open{
+    max-height: calc(100vh - 64px); overflow-y: auto;
+  }
   .mobile-panel-inner{ padding: 8px 32px 24px; display:flex; flex-direction:column; }
   .mobile-panel a{
     font-size:15px; font-weight:500; color: var(--ink); padding:14px 0;
@@ -398,6 +400,8 @@
   }
   .kontak-label{ font-family: var(--font-mono); font-size:11px; letter-spacing:0.06em; color: var(--ink-muted); text-transform:uppercase; margin-bottom:4px; }
   .kontak-value{ font-size:15px; font-weight:600; color: var(--navy); line-height:1.5; }
+  .kontak-link{ text-decoration:none; display:inline-block; }
+  .kontak-link:hover{ text-decoration:underline; color: var(--red-dark); }
   .kontak-cta{
     background: var(--red); border-radius:8px; padding:38px 34px;
     display:flex; flex-direction:column; justify-content:center; gap:14px;
@@ -521,10 +525,6 @@
     .brand-mark{ width:36px; height:36px; }
     .brand-divider{ height:22px; }
     .feature-grid{ grid-template-columns:1fr; }
-    .div-grid{ grid-template-columns:1fr 1fr; }
-  }
-  @media (max-width: 560px){
-    .div-grid{ grid-template-columns:1fr; }
   }
 
   /* ===== Divisi + Anggota ===== */
@@ -591,6 +591,16 @@
   .anggota-tag{
     font-family: var(--font-mono); font-size:10px; letter-spacing:0.05em; text-transform:uppercase;
     color: var(--red-dark); border:1px solid rgba(200,30,44,0.25); padding:3px 9px; border-radius:2px; margin-top:2px;
+  }
+
+  @media (max-width: 880px){
+    .div-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width: 560px){
+    .div-grid{ grid-template-columns:1fr; }
+    .div-card{ padding:22px 20px 20px; }
+    .div-top{ flex-wrap:wrap; gap:10px; }
+    .anggota-card{ padding:22px 16px; }
   }
 
 * { box-sizing: border-box; }

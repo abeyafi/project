@@ -365,3 +365,18 @@ dan mobile. Bug yang ditemukan dan diperbaiki:
   (Tab). Sekarang semua elemen interaktif dapat garis fokus merah yang
   jelas saat dinavigasi pakai keyboard — penting untuk pengguna yang
   tidak pakai mouse/trackpad, dan juga standar praktik profesional.
+
+## Bug mobile Divisi — ditemukan dan diperbaiki
+
+Kartu Bidang di section Divisi tetap memaksa 3 kolom sejajar di HP,
+padahal seharusnya menyusut jadi 1 kolom. Penyebabnya: aturan CSS
+untuk tampilan mobile-nya (`.div-grid`) sempat ditulis lebih dulu di
+file, sebelum aturan dasarnya sendiri — jadi aturan dasar yang datang
+belakangan diam-diam menimpa balik aturan mobile itu (soal urutan
+kode CSS, bukan soal media query-nya salah). Sudah diperbaiki dan
+dicek ulang dengan scan otomatis ke seluruh file — tidak ada pola bug
+serupa di bagian lain.
+
+Sekalian dirapikan: padding kartu Bidang & Pengurus Inti sedikit
+dikecilkan khusus di layar sangat sempit (di bawah 560px) supaya
+tidak terlalu mepet.

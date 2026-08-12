@@ -270,7 +270,7 @@ create table if not exists kontak (
   constraint single_row check (id = 1)
 );
 insert into kontak (id, alamat, kerja_sama, instagram, form_url)
-  values (1, 'Gedung FTK, Kampus UIN Ar-Raniry, Banda Aceh, Indonesia', '+62 8xx-xxxx-xxxx', '@rispi.arraniry', '')
+  values (1, 'Gedung FTK, Kampus UIN Ar-Raniry, Banda Aceh, Indonesia', '+62 8xx-xxxx-xxxx', '@ukkrispi', '')
   on conflict (id) do nothing;
 
 alter table kontak enable row level security;

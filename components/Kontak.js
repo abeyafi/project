@@ -74,13 +74,24 @@ export default function Kontak() {
               <div className="kontak-icon">ig</div>
               <div>
                 <div className="kontak-label">Instagram</div>
-                <EditableText
-                  as="div"
-                  className="kontak-value"
-                  value={data.instagram}
-                  isAdmin={isAdmin}
-                  onSave={(v) => updateField("instagram", v)}
-                />
+                {isAdmin ? (
+                  <EditableText
+                    as="div"
+                    className="kontak-value"
+                    value={data.instagram}
+                    isAdmin={isAdmin}
+                    onSave={(v) => updateField("instagram", v)}
+                  />
+                ) : (
+                  <a
+                    className="kontak-value kontak-link"
+                    href="https://www.instagram.com/ukkrispi"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {data.instagram}
+                  </a>
+                )}
               </div>
             </div>
           </div>
