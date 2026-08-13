@@ -51,7 +51,7 @@ export default function Hero() {
           layak terbit.
         </p>
         <div className="hero-ctas reveal reveal-delay-2">
-          <a href="#" className="btn-primary">
+          <a href="/berita" className="btn-primary">
             Lihat Program
           </a>
           <a href="/#kalender" className="btn-outline">
