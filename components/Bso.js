@@ -144,7 +144,7 @@ export default function Bso() {
                   onSave={(v) => updateField("cta_label", v)}
                 />
               ) : (
-                <a href="/berita" className="btn-primary">
+                <a href="#" className="btn-primary">
                   {data.cta_label}
                 </a>
               )}
