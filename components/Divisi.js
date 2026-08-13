@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useAdmin } from "../hooks/useAdmin";
+import { useConfirm } from "../hooks/useConfirm";
 import EditableText from "./EditableText";
 import EditablePhoto from "./EditablePhoto";
 import SectionSkeleton from "./SectionSkeleton";
 
 export default function Divisi() {
   const { isAdmin } = useAdmin();
+  const { confirm, ConfirmDialog } = useConfirm();
   const [pimpinan, setPimpinan] = useState([]);
   const [bidangList, setBidangList] = useState([]);
   const [anggotaMap, setAnggotaMap] = useState({});
@@ -48,7 +50,7 @@ export default function Divisi() {
     if (data) setPimpinan((prev) => [...prev, data]);
   }
   async function removePimpinan(id) {
-    if (!confirm("Hapus dari pimpinan inti?")) return;
+    if (!(await confirm("Hapus dari pimpinan inti?"))) return;
     await supabase.from("pimpinan_inti").delete().eq("id", id);
     setPimpinan((prev) => prev.filter((p) => p.id !== id));
   }
@@ -236,6 +238,7 @@ export default function Divisi() {
           </div>
         </div>
       </div>
+      {ConfirmDialog}
     </section>
   );
 }

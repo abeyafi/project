@@ -7,9 +7,11 @@ import EditableText from "../../../components/EditableText";
 import EditablePhoto from "../../../components/EditablePhoto";
 import { logActivity } from "../../../lib/activityLog";
 import { slugify, uniqueSlugSuffix } from "../../../lib/slugify";
+import { useConfirm } from "../../../hooks/useConfirm";
 
 export default function AdminBeritaPage() {
   const { session } = useAdmin();
+  const { confirm, ConfirmDialog } = useConfirm();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -67,7 +69,7 @@ export default function AdminBeritaPage() {
   }
 
   async function removeArticle(article) {
-    if (!confirm(`Hapus berita "${article.title}"?`)) return;
+    if (!(await confirm(`Hapus berita "${article.title}"?`))) return;
     await supabase.from("articles").delete().eq("id", article.id);
     setArticles((prev) => prev.filter((a) => a.id !== article.id));
     logActivity({ action: "delete", entityType: "articles", entityId: article.id, description: `Menghapus berita: ${article.title}` });
@@ -178,6 +180,7 @@ export default function AdminBeritaPage() {
           </div>
         ))}
       </div>
+      {ConfirmDialog}
     </div>
   );
 }

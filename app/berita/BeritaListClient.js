@@ -16,7 +16,8 @@ export default function BeritaListClient() {
         .from("articles")
         .select("*")
         .eq("status", "published")
-        .order("published_at", { ascending: false });
+        .order("published_at", { ascending: false })
+        .limit(60);
       setArticles(data || []);
       setLoading(false);
     }
@@ -41,7 +42,7 @@ export default function BeritaListClient() {
               {articles.map((a) => (
                 <a className="berita-card" href={`/berita/${a.slug}`} key={a.id}>
                   <div className="berita-card-thumb">
-                    {a.thumbnail_url && <img src={a.thumbnail_url} alt={a.title} />}
+                    {a.thumbnail_url && <img src={a.thumbnail_url} alt={a.title}  draggable="false"/>}
                   </div>
                   <div className="berita-card-body">
                     <span className="berita-card-category">{a.category}</span>

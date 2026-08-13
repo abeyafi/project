@@ -2,6 +2,7 @@ import "./globals.css";
 import { AdminProvider } from "../hooks/useAdmin";
 import AdminBar from "../components/AdminBar";
 import SecurityGuard from "../components/SecurityGuard";
+import BackToTop from "../components/BackToTop";
 
 // Ganti NEXT_PUBLIC_SITE_URL di .env.local / Vercel env vars begitu
 // domain final sudah ada (vercel.app atau domain custom) — dipakai
@@ -99,6 +100,7 @@ export default function RootLayout({ children }) {
         <AdminProvider>
           <AdminBar />
           {children}
+          <BackToTop />
         </AdminProvider>
       </body>
     </html>

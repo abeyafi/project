@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useAdmin } from "../hooks/useAdmin";
+import { useConfirm } from "../hooks/useConfirm";
 import EditableText from "./EditableText";
 import EditablePhoto from "./EditablePhoto";
 import Lightbox from "./Lightbox";
@@ -10,15 +11,17 @@ import SectionSkeleton from "./SectionSkeleton";
 
 export default function Galeri() {
   const { isAdmin } = useAdmin();
+  const { confirm, ConfirmDialog } = useConfirm();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [lightbox, setLightbox] = useState(null); // { url, title }
+  const [lightbox, setLightbox] = useState(null); // { index }
 
   async function load() {
     const { data } = await supabase
       .from("galeri")
       .select("*")
-      .order("sort_order", { ascending: true });
+      .order("sort_order", { ascending: true })
+      .limit(100);
     setItems(data || []);
     setLoading(false);
   }
@@ -44,7 +47,7 @@ export default function Galeri() {
   }
 
   async function removeItem(id) {
-    if (!confirm("Hapus foto ini dari galeri?")) return;
+    if (!(await confirm("Hapus foto ini dari galeri?"))) return;
     await supabase.from("galeri").delete().eq("id", id);
     setItems((prev) => prev.filter((it) => it.id !== id));
   }
@@ -76,9 +79,7 @@ export default function Galeri() {
                 entityType="galeri"
                 entityId={item.id}
                 cornerButton
-                onImageClick={() =>
-                  setLightbox({ url: item.photo_url, title: item.title })
-                }
+                onImageClick={() => setLightbox({ index: i })}
                 onSaved={(url) => updateField(item.id, "photo_url", url)}
               />
               <div className="mount-cap">
@@ -120,10 +121,27 @@ export default function Galeri() {
       </div>
 
       <Lightbox
-        url={lightbox?.url}
-        title={lightbox?.title}
+        url={lightbox ? items[lightbox.index]?.photo_url : null}
+        title={lightbox ? items[lightbox.index]?.title : null}
         onClose={() => setLightbox(null)}
+        onPrev={
+          lightbox && items.length > 1
+            ? () =>
+                setLightbox((prev) => ({
+                  index: (prev.index - 1 + items.length) % items.length,
+                }))
+            : undefined
+        }
+        onNext={
+          lightbox && items.length > 1
+            ? () =>
+                setLightbox((prev) => ({
+                  index: (prev.index + 1) % items.length,
+                }))
+            : undefined
+        }
       />
+      {ConfirmDialog}
     </section>
   );
 }

@@ -77,12 +77,12 @@ export default function Header() {
         <div className="brand">
           <div className="brand-logos">
             <div className="uin-mark">
-              <img src="/logo-uin.png" alt="Logo UIN Ar-Raniry" />
+              <img src="/logo-uin.png" alt="Logo UIN Ar-Raniry"  draggable="false"/>
             </div>
             <div className="brand-divider"></div>
           </div>
           <div className="brand-mark">
-            <img src="/logo-rispi.png" alt="Logo RISPI" />
+            <img src="/logo-rispi.png" alt="Logo RISPI"  draggable="false"/>
           </div>
           <div>
             <div className="brand-text">UKK RISPI</div>

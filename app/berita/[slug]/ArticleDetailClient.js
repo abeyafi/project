@@ -55,7 +55,7 @@ export default function ArticleDetailClient({ slug }) {
               </div>
               {article.thumbnail_url && (
                 <div className="berita-detail-thumb reveal">
-                  <img src={article.thumbnail_url} alt={article.title} />
+                  <img src={article.thumbnail_url} alt={article.title}  draggable="false"/>
                 </div>
               )}
               <div className="berita-detail-content reveal">{article.content}</div>

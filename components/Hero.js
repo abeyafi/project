@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useAdmin } from "../hooks/useAdmin";
 import EditableText from "./EditableText";
+import CountUpStat from "./CountUpStat";
 
 const DEFAULT_STATS = {
   stat1_value: "50+",
@@ -60,13 +61,17 @@ export default function Hero() {
         </div>
         <div className="hero-meta reveal reveal-delay-3">
           <div>
-            <EditableText
-              as="div"
-              className="num"
-              value={stats.stat1_value}
-              isAdmin={isAdmin}
-              onSave={(v) => updateStat("stat1_value", v)}
-            />
+            {isAdmin ? (
+              <EditableText
+                as="div"
+                className="num"
+                value={stats.stat1_value}
+                isAdmin={isAdmin}
+                onSave={(v) => updateStat("stat1_value", v)}
+              />
+            ) : (
+              <CountUpStat value={stats.stat1_value} />
+            )}
             <EditableText
               as="div"
               className="lbl"
@@ -76,13 +81,17 @@ export default function Hero() {
             />
           </div>
           <div>
-            <EditableText
-              as="div"
-              className="num"
-              value={stats.stat2_value}
-              isAdmin={isAdmin}
-              onSave={(v) => updateStat("stat2_value", v)}
-            />
+            {isAdmin ? (
+              <EditableText
+                as="div"
+                className="num"
+                value={stats.stat2_value}
+                isAdmin={isAdmin}
+                onSave={(v) => updateStat("stat2_value", v)}
+              />
+            ) : (
+              <CountUpStat value={stats.stat2_value} />
+            )}
             <EditableText
               as="div"
               className="lbl"
@@ -92,13 +101,17 @@ export default function Hero() {
             />
           </div>
           <div>
-            <EditableText
-              as="div"
-              className="num"
-              value={stats.stat3_value}
-              isAdmin={isAdmin}
-              onSave={(v) => updateStat("stat3_value", v)}
-            />
+            {isAdmin ? (
+              <EditableText
+                as="div"
+                className="num"
+                value={stats.stat3_value}
+                isAdmin={isAdmin}
+                onSave={(v) => updateStat("stat3_value", v)}
+              />
+            ) : (
+              <CountUpStat value={stats.stat3_value} />
+            )}
             <EditableText
               as="div"
               className="lbl"
@@ -115,7 +128,7 @@ export default function Hero() {
           <div className="stamp-card c2"></div>
           <div className="stamp-card c3">
             <div className="stamp-seal">
-              <img src="/logo-rispi.png" alt="Logo RISPI" />
+              <img src="/logo-rispi.png" alt="Logo RISPI"  draggable="false"/>
             </div>
             <div className="stamp-caption">
               UKK &middot; <b>RISPI</b>

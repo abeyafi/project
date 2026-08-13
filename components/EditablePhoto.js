@@ -89,7 +89,7 @@ export default function EditablePhoto({
       onClick={onImageClick && url ? onImageClick : undefined}
       style={onImageClick && url ? { cursor: "zoom-in" } : undefined}
     >
-      {url ? <img src={url} alt={alt} /> : children}
+      {url ? <img src={url} alt={alt}  draggable="false"/> : children}
 
       {isAdmin && !cornerButton && (
         <div

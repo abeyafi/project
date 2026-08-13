@@ -32,6 +32,13 @@ const nextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
+          {
+            // Paksa browser selalu pakai HTTPS untuk domain ini ke
+            // depannya (Vercel sudah otomatis HTTPS, ini header
+            // tambahan supaya browser mengingatnya sendiri).
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
+          },
         ],
       },
     ];

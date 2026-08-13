@@ -5,7 +5,7 @@ export default function Footer() {
         <div>
           <div className="footer-brand">
             <div className="brand-mark">
-              <img src="/logo-rispi.png" alt="Logo RISPI" />
+              <img src="/logo-rispi.png" alt="Logo RISPI"  draggable="false"/>
             </div>
             <div className="brand-text footer-brand-text">UKK RISPI</div>
           </div>

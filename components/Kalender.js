@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useAdmin } from "../hooks/useAdmin";
+import { useConfirm } from "../hooks/useConfirm";
 import EditableText from "./EditableText";
 import { monthNames, weekdayLabels } from "../data/events";
 import SectionSkeleton from "./SectionSkeleton";
@@ -18,6 +19,7 @@ function todayKey() {
 
 export default function Kalender() {
   const { isAdmin } = useAdmin();
+  const { confirm, ConfirmDialog } = useConfirm();
   const now = new Date();
   const [calYear, setCalYear] = useState(now.getFullYear());
   const [calMonth, setCalMonth] = useState(now.getMonth());
@@ -118,7 +120,7 @@ export default function Kalender() {
   async function removeEvent() {
     const ev = events[selectedKey];
     if (!ev) return;
-    if (!confirm("Hapus acara ini?")) return;
+    if (!(await confirm("Hapus acara ini?"))) return;
     await supabase.from("calendar_events").delete().eq("id", ev.id);
     setEvents((prev) => {
       const next = { ...prev };
@@ -264,6 +266,7 @@ export default function Kalender() {
           </div>
         </div>
       </div>
+      {ConfirmDialog}
     </section>
   );
 }

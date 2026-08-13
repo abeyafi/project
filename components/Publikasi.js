@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useAdmin } from "../hooks/useAdmin";
+import { useConfirm } from "../hooks/useConfirm";
 import EditableText from "./EditableText";
 import { logActivity } from "../lib/activityLog";
 import SectionSkeleton from "./SectionSkeleton";
 
 export default function Publikasi() {
   const { isAdmin } = useAdmin();
+  const { confirm, ConfirmDialog } = useConfirm();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,7 +20,8 @@ export default function Publikasi() {
     const { data } = await supabase
       .from("publikasi")
       .select("*")
-      .order("sort_order", { ascending: true });
+      .order("sort_order", { ascending: true })
+      .limit(100);
     setRows(data || []);
     setLoading(false);
   }
@@ -66,7 +69,7 @@ export default function Publikasi() {
   }
 
   async function removeRow(id) {
-    if (!confirm("Hapus naskah ini?")) return;
+    if (!(await confirm("Hapus naskah ini?"))) return;
     await supabase.from("publikasi").delete().eq("id", id);
     setRows((prev) => prev.filter((r) => r.id !== id));
   }
@@ -154,6 +157,7 @@ export default function Publikasi() {
           </div>
         )}
       </div>
+      {ConfirmDialog}
     </section>
   );
 }

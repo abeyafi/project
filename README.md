@@ -471,3 +471,48 @@ Sebelumnya semua kotak edit multi-baris ukurannya tetap kecil
   Berita masih diedit inline di halaman daftar (`/admin/berita`),
   bukan halaman editor terpisah. Berfungsi penuh, cuma belum sesuai
   layout ideal yang diminta spesifikasi.
+
+## Fase 5 — Interaktivitas (Phase 42, scope terpilih)
+
+Dokumen spesifikasi ini punya 38+ sub-fitur — daripada menyebar tipis
+ke semuanya, saya pilih yang paling bernilai, kontan, dan aman
+diimplementasikan sekarang. Sisanya didaftar jelas di bawah sebagai
+"belum dikerjakan", bukan diam-diam dilewati.
+
+### Sudah dikerjakan
+
+- **Dialog konfirmasi kustom** menggantikan `window.confirm()` bawaan
+  browser di 7 tempat (hapus foto Galeri, prestasi, pimpinan inti,
+  acara kalender, publikasi, berita, program) — sekarang tampil
+  sebagai modal sesuai desain situs, bukan popup browser generik.
+  (`hooks/useConfirm.js`, reusable)
+- **Lightbox Galeri**: navigasi Sebelumnya/Berikutnya (tombol + panah
+  kiri/kanan keyboard), Esc untuk tutup — sebelumnya cuma bisa lihat
+  satu foto lalu tutup manual untuk lihat foto lain.
+- **Animasi hitung naik** pada statistik Hero (50+, 12, 4) — jalan
+  sekali saat section pertama kali terlihat di layar (bukan
+  IntersectionObserver berulang), otomatis dilewati kalau mode admin
+  aktif (supaya tetap bisa langsung diedit) atau kalau pengaturan
+  "reduced motion" pengunjung aktif.
+- **`prefers-reduced-motion` dihormati secara global** — semua animasi
+  (scroll-reveal, shimmer loading, count-up) otomatis nonaktif kalau
+  pengunjung mengaktifkan pengaturan itu di device-nya.
+- **Tombol "kembali ke atas"** muncul setelah scroll ke bawah.
+
+### SENGAJA belum dikerjakan (scope terlalu besar untuk satu sesi)
+
+- Global search (Berita/Program/Publikasi/Prestasi sekaligus)
+- Filter Program Kerja per divisi + search di halaman publik
+- Filter Prestasi (tahun/kategori) dan Publikasi (tahun/kategori/pencarian)
+- Toggle tampilan kalender/list untuk Agenda
+- Reading progress indicator di halaman detail Berita
+- Related articles di halaman detail Berita
+- Autosave draft + peringatan "perubahan belum disimpan"
+- URL state untuk filter (`?search=...`, `?division=...`)
+- Toast notification system terpusat
+- Dashboard admin dengan kartu yang bisa diklik untuk filter
+- Filter lanjutan Activity Log (per admin, rentang tanggal)
+- Active-section indicator di navbar saat scroll
+
+Kalau mau lanjut ke salah satu ini, sebut yang mana — akan saya
+kerjakan dengan fokus yang sama seperti fase-fase sebelumnya.

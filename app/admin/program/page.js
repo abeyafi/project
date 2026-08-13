@@ -6,6 +6,7 @@ import EditableText from "../../../components/EditableText";
 import EditablePhoto from "../../../components/EditablePhoto";
 import { logActivity } from "../../../lib/activityLog";
 import { slugify, uniqueSlugSuffix } from "../../../lib/slugify";
+import { useConfirm } from "../../../hooks/useConfirm";
 
 const FILTERS = [
   { key: "all", label: "Semua" },
@@ -15,6 +16,7 @@ const FILTERS = [
 ];
 
 export default function AdminProgramPage() {
+  const { confirm, ConfirmDialog } = useConfirm();
   const [divisions, setDivisions] = useState([]);
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -78,7 +80,7 @@ export default function AdminProgramPage() {
   }
 
   async function removeProgram(program) {
-    if (!confirm(`Hapus program "${program.title}"? Program ini akan dihapus dari sistem.`)) return;
+    if (!(await confirm(`Hapus program "${program.title}"? Program ini akan dihapus dari sistem.`))) return;
     await supabase.from("programs").delete().eq("id", program.id);
     setPrograms((prev) => prev.filter((p) => p.id !== program.id));
     logActivity({ action: "delete_program", entityType: "programs", entityId: program.id, description: `Menghapus program: ${program.title}` });
@@ -230,6 +232,7 @@ export default function AdminProgramPage() {
           ))}
         </div>
       )}
+      {ConfirmDialog}
     </div>
   );
 }

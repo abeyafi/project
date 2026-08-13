@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useAdmin } from "../hooks/useAdmin";
+import { useConfirm } from "../hooks/useConfirm";
 import EditableText from "./EditableText";
 import SectionSkeleton from "./SectionSkeleton";
 
@@ -10,6 +11,7 @@ const RANK_CLASSES = ["gold", "silver", "outline"];
 
 export default function Prestasi() {
   const { isAdmin } = useAdmin();
+  const { confirm, ConfirmDialog } = useConfirm();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +19,8 @@ export default function Prestasi() {
     const { data } = await supabase
       .from("prestasi")
       .select("*")
-      .order("sort_order", { ascending: true });
+      .order("sort_order", { ascending: true })
+      .limit(100);
     setRows(data || []);
     setLoading(false);
   }
@@ -57,7 +60,7 @@ export default function Prestasi() {
   }
 
   async function removeRow(id) {
-    if (!confirm("Hapus baris prestasi ini?")) return;
+    if (!(await confirm("Hapus baris prestasi ini?"))) return;
     await supabase.from("prestasi").delete().eq("id", id);
     setRows((prev) => prev.filter((r) => r.id !== id));
   }
@@ -153,6 +156,7 @@ export default function Prestasi() {
           </div>
         )}
       </div>
+      {ConfirmDialog}
     </section>
   );
 }

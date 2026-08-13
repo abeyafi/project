@@ -71,7 +71,7 @@ export default function ProgramDetailPage() {
 
               {program.image_url && (
                 <div className="berita-detail-thumb reveal">
-                  <img src={program.image_url} alt={program.title} />
+                  <img src={program.image_url} alt={program.title}  draggable="false"/>
                 </div>
               )}
 

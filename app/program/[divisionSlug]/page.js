@@ -61,7 +61,7 @@ export default function DivisionProgramsPage({ params }) {
                   {programs.map((p) => (
                     <a className="berita-card" href={`/program/${divisionSlug}/${p.slug}`} key={p.id}>
                       <div className="berita-card-thumb">
-                        {p.image_url && <img src={p.image_url} alt={p.title} />}
+                        {p.image_url && <img src={p.image_url} alt={p.title}  draggable="false"/>}
                       </div>
                       <div className="berita-card-body">
                         <span className="berita-card-category">

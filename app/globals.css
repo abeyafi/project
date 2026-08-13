@@ -48,16 +48,18 @@
     overflow:hidden; flex-shrink:0;
     border:1px solid var(--hairline);
     background:var(--white);
+    display:flex; align-items:center; justify-content:center;
   }
-  .uin-mark img{ width:100%; height:100%; object-fit:cover; }
+  .uin-mark img{ width:84%; height:84%; object-fit:contain; }
   .brand-divider{ width:1px; height:26px; background: var(--hairline); flex-shrink:0; }
   .brand-mark{
     width:42px; height:42px; border-radius:50%;
     overflow:hidden; flex-shrink:0;
     border:1px solid var(--hairline);
     background:var(--white);
+    display:flex; align-items:center; justify-content:center;
   }
-  .brand-mark img{ width:100%; height:100%; object-fit:cover; }
+  .brand-mark img{ width:80%; height:80%; object-fit:contain; }
   .brand-text{ font-family: var(--font-serif); font-weight:600; font-size:17px; color: var(--navy); letter-spacing:0.01em; }
   .brand-sub{ font-family: var(--font-mono); font-size:10px; color: var(--ink-muted); letter-spacing:0.06em; text-transform:uppercase; }
   nav.links{ display:flex; align-items:center; gap:34px; }
@@ -761,6 +763,22 @@ html { scroll-behavior: smooth; }
   position:absolute; top:20px; right:28px; background:none; border:none;
   color: var(--white); font-size:34px; line-height:1; cursor:pointer; z-index:1001;
 }
+.lightbox-nav{
+  position:absolute; top:50%; transform:translateY(-50%);
+  background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.25);
+  color: var(--white); width:48px; height:48px; border-radius:50%;
+  font-size:26px; line-height:1; cursor:pointer; z-index:1001;
+  display:flex; align-items:center; justify-content:center;
+  transition: background .15s ease;
+}
+.lightbox-nav:hover{ background: rgba(255,255,255,0.22); }
+.lightbox-nav-prev{ left:20px; }
+.lightbox-nav-next{ right:20px; }
+@media (max-width: 640px){
+  .lightbox-nav{ width:38px; height:38px; font-size:20px; }
+  .lightbox-nav-prev{ left:8px; }
+  .lightbox-nav-next{ right:8px; }
+}
 
 /* Jaga-jaga: elemen yang sedang diedit tidak boleh pernah tersembunyi
    oleh animasi scroll-reveal, apa pun urutan render/timing-nya. */
@@ -1074,4 +1092,29 @@ textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible{
 .admin-date-label{
   display:flex; align-items:center; gap:6px; font-size:11.5px; color: var(--ink-muted);
   font-family: var(--font-mono);
+}
+
+/* ===== Reduced motion (Phase 20) ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .skeleton-shimmer::after { animation: none !important; left: 30%; }
+}
+
+/* ===== Back to top ===== */
+.back-to-top{
+  position:fixed; bottom:24px; right:24px; z-index:80;
+  width:44px; height:44px; border-radius:50%; border:none;
+  background: var(--navy); color: var(--white); font-size:18px; cursor:pointer;
+  box-shadow: 0 8px 20px rgba(11,31,58,0.3);
+  transition: background .2s ease, transform .15s ease;
+}
+.back-to-top:hover{ background: var(--red); transform: translateY(-2px); }
+@media (max-width: 560px){
+  .back-to-top{ bottom:16px; right:16px; width:40px; height:40px; }
 }
