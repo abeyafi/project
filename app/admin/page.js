@@ -7,6 +7,7 @@ const COUNT_TABLES = [
   { key: "publikasi", label: "Publikasi", table: "publikasi" },
   { key: "galeri", label: "Galeri", table: "galeri" },
   { key: "articles", label: "Berita", table: "articles" },
+  { key: "programs", label: "Program Kerja", table: "programs" },
   { key: "calendar_events", label: "Agenda", table: "calendar_events" },
   { key: "prestasi", label: "Prestasi", table: "prestasi" },
   { key: "admins", label: "Admin", table: "admins" },
@@ -81,6 +82,7 @@ export default function AdminDashboardPage() {
 
       <div className="admin-quick-actions">
         <a href="/admin/berita" className="edit-btn">+ Tambah Berita</a>
+        <a href="/admin/program" className="edit-btn outline">+ Tambah Program</a>
         <a href="/#publikasi" className="edit-btn outline">+ Tambah Publikasi</a>
         <a href="/#galeri" className="edit-btn outline">Upload Galeri</a>
         <a href="/#kalender" className="edit-btn outline">+ Tambah Agenda</a>

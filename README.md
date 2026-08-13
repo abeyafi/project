@@ -421,3 +421,53 @@ ada di bawahnya (tidak dihapus, cuma tidak lagi jadi prioritas utama).
 **Migrasi baru**: jalankan `supabase/add_kontak_email.sql` — menambah
 kolom `email` (default `ukkrispi@ar-raniry.ac.id`, sesuaikan lewat
 tombol edit di halaman Kontak kalau perlu diganti).
+
+## Fase 4 — Program Kerja CMS + auto-grow textarea
+
+Sesuai instruksi terakhir ("yang sudah ada tak perlu ditambah"), fase
+ini fokus ke bagian yang genuinely belum ada, bukan mengulang RBAC/
+Activity Log/ImageCropper/bug opacity yang sudah dikerjakan sebelumnya.
+
+### Program Kerja (baru sepenuhnya)
+
+Tombol "Lihat Program" di kartu Bidang (section Divisi) — yang
+sebelumnya `href="#"` alias tidak mengarah ke mana pun — sekarang
+tersambung ke sistem CMS program kerja sungguhan:
+
+- **`/admin/program`** — kelola program kerja per divisi/bidang, dengan
+  Draft/Published/Archived, filter status, dan foto (pakai
+  ImageCropper yang sama seperti Galeri/Berita).
+- **`/program/[divisionSlug]`** — halaman publik daftar program kerja
+  satu divisi (mis. `/program/riset`, `/program/psdm`,
+  `/program/humas-media`). Kalau belum ada program published, tampil
+  pesan "Belum ada program kerja" yang jelas — bukan error atau
+  halaman kosong membingungkan.
+- **`/program/[divisionSlug]/[programSlug]`** — detail satu program:
+  deskripsi, tujuan, penanggung jawab, periode, foto.
+- **Database sengaja dikosongkan** — tidak ada program dummy/contoh
+  yang dibuat. Diisi manual lewat `/admin/program` setelah rapat kerja
+  resmi, sesuai permintaan.
+
+**Migrasi baru**: jalankan `supabase/add_program_kerja.sql` — bikin
+tabel `programs`, tambah kolom `slug` ke tabel `bidang` yang sudah ada
+(diisi otomatis: riset, psdm, humas-media), dan RLS-nya.
+
+### Textarea auto-grow (seperti Blogger)
+
+Semua kotak edit multi-baris (deskripsi Bidang, isi Berita, deskripsi
+Program, dst) sekarang otomatis memanjang mengikuti isi teksnya,
+sampai batas 480px tinggi — setelah itu baru muncul scrollbar internal.
+Sebelumnya semua kotak edit multi-baris ukurannya tetap kecil
+(3 baris) berapa pun panjang teksnya.
+
+### Yang SENGAJA ditunda ke sesi berikutnya
+
+- **Berita Headline system** (`is_headline`, tampil di landing page) —
+  situs ini belum punya section Berita di halaman utama sama sekali
+  (Berita murni halaman `/berita` terpisah), jadi fitur ini butuh
+  keputusan desain tambahan (section baru di beranda) yang lebih baik
+  dibahas dulu daripada ditambahkan buru-buru.
+- **Halaman editor Berita penuh** (`/admin/berita/[id]`) — saat ini
+  Berita masih diedit inline di halaman daftar (`/admin/berita`),
+  bukan halaman editor terpisah. Berfungsi penuh, cuma belum sesuai
+  layout ideal yang diminta spesifikasi.

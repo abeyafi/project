@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function EditableText({
   value,
@@ -14,6 +14,28 @@ export default function EditableText({
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value || "");
   const [saving, setSaving] = useState(false);
+  const textareaRef = useRef(null);
+
+  // Auto-grow: tinggi textarea mengikuti isi teksnya (seperti editor
+  // Blogger) -- pendek untuk teks pendek, memanjang otomatis sampai
+  // batas wajar untuk naskah panjang, baru scrollbar internal muncul.
+  function resizeTextarea() {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    const max = 480;
+    if (el.scrollHeight > max) {
+      el.style.height = max + "px";
+      el.style.overflowY = "auto";
+    } else {
+      el.style.height = el.scrollHeight + "px";
+      el.style.overflowY = "hidden";
+    }
+  }
+
+  useEffect(() => {
+    if (editing && multiline) resizeTextarea();
+  }, [editing, multiline]);
 
   if (!isAdmin) {
     return <Tag className={className}>{value || placeholder}</Tag>;
@@ -45,10 +67,15 @@ export default function EditableText({
     <div className={className + " editable-field is-editing"}>
       {multiline ? (
         <textarea
+          ref={textareaRef}
           rows={3}
           value={draft}
           autoFocus
-          onChange={(e) => setDraft(e.target.value)}
+          onChange={(e) => {
+            setDraft(e.target.value);
+            resizeTextarea();
+          }}
+          className="editable-autogrow"
         />
       ) : (
         <input

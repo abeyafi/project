@@ -226,6 +226,11 @@ export default function Divisi() {
                     </button>
                   )}
                 </div>
+                {b.slug && (
+                  <a className="div-program-link" href={`/program/${b.slug}`}>
+                    Lihat Program &rarr;
+                  </a>
+                )}
               </div>
             ))}
           </div>

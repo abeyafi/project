@@ -7,6 +7,7 @@ import { useAdmin } from "../../hooks/useAdmin";
 const NAV = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/berita", label: "Berita" },
+  { href: "/admin/program", label: "Program Kerja" },
   { href: "/admin/activity-log", label: "Activity Log" },
 ];
 
