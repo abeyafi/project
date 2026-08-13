@@ -43,7 +43,7 @@ export const metadata = {
     siteName: SITE_NAME,
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [{ url: "/logo-rispi.png", width: 512, height: 512, alt: "Logo UKK RISPI" }],
+    images: [{ url: "/logo-rispi.png", width: 180, height: 180, alt: "Logo UKK RISPI" }],
   },
   twitter: {
     card: "summary",
