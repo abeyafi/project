@@ -13,7 +13,7 @@ const DEFAULTS = {
   description:
     "Menyiapkan anggota RISPI menghadapi kompetisi karya tulis, debat ilmiah, dan olimpiade tingkat nasional — mulai dari pematangan gagasan, simulasi lomba, hingga pendampingan hari-H.",
   tags: ["Karya Tulis Ilmiah", "Debat & Business Case", "Presentasi Ilmiah", "Simulasi Lomba"],
-  cta_label: "Lihat Program Seulawah",
+  cta_label: "Lihat Berita",
   medal_caption: "Seulawah · Divisi Kompetisi",
 };
 
@@ -144,7 +144,7 @@ export default function Bso() {
                   onSave={(v) => updateField("cta_label", v)}
                 />
               ) : (
-                <a href="#" className="btn-primary">
+                <a href="/berita" className="btn-primary">
                   {data.cta_label}
                 </a>
               )}
