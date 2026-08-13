@@ -52,7 +52,7 @@ export default function Hero() {
         </p>
         <div className="hero-ctas reveal reveal-delay-2">
           <a href="/berita" className="btn-primary">
-            Lihat Program
+            Lihat Berita
           </a>
           <a href="/#kalender" className="btn-outline">
             Kalender Kegiatan
