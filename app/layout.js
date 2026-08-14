@@ -34,6 +34,9 @@ export const metadata = {
     index: true,
     follow: true,
   },
+  verification: {
+    google: "QZKjSkVFcubzxn0JZeHWNnAZ_fpwKcfSOiXKG71y-n4",
+  },
   // Favicon & apple-touch-icon otomatis dipakai Next.js dari
   // app/icon.png dan app/apple-icon.png -- tidak perlu didaftarkan
   // manual di sini.
