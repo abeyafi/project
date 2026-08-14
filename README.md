@@ -516,3 +516,43 @@ diimplementasikan sekarang. Sisanya didaftar jelas di bawah sebagai
 
 Kalau mau lanjut ke salah satu ini, sebut yang mana — akan saya
 kerjakan dengan fokus yang sama seperti fase-fase sebelumnya.
+
+## Fix: sidebar admin terpotong di layar pendek
+
+**Akar masalah**: sidebar dipaksa `height:100vh` tapi kontennya (daftar
+menu) tidak punya mekanisme scroll sendiri — di layar dengan tinggi
+terbatas (laptop kecil, browser di-resize pendek, dll), menu paling
+bawah ("Organisasi") terpotong di luar area yang terlihat, tidak bisa
+diakses sama sekali.
+
+**Perbaikan** (bukan tempelan angka tetap): sidebar sekarang dibagi 3
+bagian pakai flexbox — header "ADMIN RISPI" tetap di atas, footer
+(email/logout) tetap di bawah, dan daftar menu di tengah punya
+`flex:1; min-height:0; overflow-y:auto` sehingga bisa scroll sendiri
+kalau kepanjangan, sementara header & footer tidak ikut bergeser.
+Dipakai juga `100dvh` (dynamic viewport height, lebih akurat di HP)
+dengan `100vh` sebagai fallback untuk browser lama.
+
+Sekalian ditambahkan: menu yang sedang aktif (sesuai halaman yang
+dibuka) sekarang ditandai jelas dan otomatis di-scroll ke pandangan
+kalau letaknya di luar area yang terlihat — tanpa menggeser scroll
+halaman utama.
+
+## Sidebar admin dikelompokkan (grouped navigation)
+
+Sidebar sekarang dibagi 4 kelompok sesuai struktur yang diminta:
+
+```
+OVERVIEW      → Dashboard
+CONTENT       → Berita, Program Kerja, Publikasi, Galeri, Agenda, Prestasi
+ORGANIZATION  → Organisasi, Divisi, BSO, Pimpinan
+SYSTEM        → Activity Log, Admin (khusus Super Admin)
+```
+
+**Catatan soal grup Organization**: di situs ini, "Organisasi" dan
+"Divisi" secara struktur data adalah section yang sama (`#divisi`),
+jadi keduanya mengarah ke section itu — sementara "Pimpinan" dan
+"Divisi" sekarang punya anchor spesifik masing-masing
+(`#pimpinan` dan `#bidang`, baru ditambahkan) supaya klik dari
+sidebar langsung scroll ke bagian yang tepat (Pimpinan Inti vs
+kartu Bidang), bukan cuma ke atas section secara umum.

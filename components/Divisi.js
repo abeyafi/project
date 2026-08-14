@@ -102,7 +102,7 @@ export default function Divisi() {
           </p>
         </div>
 
-        <div className="anggota-sub" style={{ marginTop: 0 }}>
+        <div className="anggota-sub" id="pimpinan" style={{ marginTop: 0, scrollMarginTop: 90 }}>
           <div className="anggota-head">
             <h3 className="reveal">Pimpinan inti</h3>
             <span className="reveal">Periode 2026/2027</span>
@@ -155,7 +155,7 @@ export default function Divisi() {
           )}
         </div>
 
-        <div className="anggota-sub">
+        <div className="anggota-sub" id="bidang" style={{ scrollMarginTop: 90 }}>
           <div className="anggota-head">
             <h3 className="reveal">Bidang</h3>
           </div>
