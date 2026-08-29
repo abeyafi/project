@@ -17,7 +17,7 @@ export default function BeritaListClient() {
         .select("*")
         .eq("status", "published")
         .order("published_at", { ascending: false })
-        .limit(60);
+        .limit(150);
       setArticles(data || []);
       setLoading(false);
     }

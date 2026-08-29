@@ -556,3 +556,22 @@ jadi keduanya mengarah ke section itu — sementara "Pimpinan" dan
 (`#pimpinan` dan `#bidang`, baru ditambahkan) supaya klik dari
 sidebar langsung scroll ke bagian yang tepat (Pimpinan Inti vs
 kartu Bidang), bukan cuma ke atas section secara umum.
+
+## Optimalisasi: tambah banyak bahan/foto
+
+- **Upload banyak foto sekaligus di Galeri**: tombol baru "+ Upload
+  banyak foto sekaligus" — pilih banyak file foto langsung dari galeri
+  HP/komputer, semuanya otomatis jadi entri galeri baru (judul dari
+  nama file, tanggal bulan-tahun sekarang). Tidak perlu crop satu-satu
+  dulu — kalau nanti mau presisi motong satu foto tertentu, tetap bisa
+  lewat tombol "Ganti" di foto itu seperti biasa. File yang bukan
+  gambar atau lebih dari 8MB otomatis dilewati dengan pemberitahuan,
+  bukan bikin proses berhenti.
+- Tombol lama "+ Tambah foto galeri" tetap ada (sekarang dilabel
+  "+ Tambah satu foto (dengan crop)") untuk upload satu foto dengan
+  kontrol crop presisi seperti sebelumnya.
+- **Batas jumlah item dinaikkan** di semua section supaya tidak
+  kepotong kalau kontennya bertambah banyak: Galeri 100→400,
+  Publikasi & Prestasi 100→300, Berita 60→150.
+
+Tidak ada migrasi SQL untuk ini — murni perubahan kode.

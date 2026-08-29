@@ -21,7 +21,7 @@ export default function Publikasi() {
       .from("publikasi")
       .select("*")
       .order("sort_order", { ascending: true })
-      .limit(100);
+      .limit(300);
     setRows(data || []);
     setLoading(false);
   }
