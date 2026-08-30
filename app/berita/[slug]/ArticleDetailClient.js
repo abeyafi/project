@@ -6,8 +6,15 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import ScrollReveal from "../../../components/ScrollReveal";
 
+function estimateReadMinutes(text) {
+  if (!text) return 0;
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200)); // ~200 kata/menit
+}
+
 export default function ArticleDetailClient({ slug }) {
   const [article, setArticle] = useState(undefined); // undefined = loading, null = not found
+  const [authorName, setAuthorName] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -20,9 +27,24 @@ export default function ArticleDetailClient({ slug }) {
       // penonton biasa hanya dapat baris published, admin bisa lihat
       // draft juga (dipakai fitur "Preview" di /admin/berita).
       setArticle(data || null);
+
+      if (data?.author_id) {
+        const { data: author } = await supabase
+          .from("admins")
+          .select("name, email")
+          .eq("id", data.author_id)
+          .maybeSingle();
+        if (author) setAuthorName(author.name || author.email);
+      }
     }
     load();
   }, [slug]);
+
+  const paragraphs = (article?.content || "")
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  const readMinutes = estimateReadMinutes(article?.content);
 
   return (
     <>
@@ -43,22 +65,46 @@ export default function ArticleDetailClient({ slug }) {
                   umum.
                 </div>
               )}
-              <span className="section-eyebrow on-paper">{article.category}</span>
-              <h1 className="section-title on-paper reveal">{article.title}</h1>
-              <div className="berita-detail-meta">
-                {article.published_at &&
-                  new Date(article.published_at).toLocaleDateString("id-ID", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
+
+              <span className="section-eyebrow on-paper">{article.category || "Berita"}</span>
+              <h1 className="section-title on-paper reveal berita-detail-title">{article.title}</h1>
+
+              <div className="berita-byline">
+                {authorName && <span className="berita-byline-author">{authorName}</span>}
+                {article.published_at && (
+                  <span>
+                    {new Date(article.published_at).toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
+                )}
+                {readMinutes > 0 && <span>{readMinutes} menit baca</span>}
               </div>
+
               {article.thumbnail_url && (
                 <div className="berita-detail-thumb reveal">
-                  <img src={article.thumbnail_url} alt={article.title}  draggable="false"/>
+                  <img src={article.thumbnail_url} alt={article.title} draggable="false" />
                 </div>
               )}
-              <div className="berita-detail-content reveal">{article.content}</div>
+
+              {article.excerpt && (
+                <p className="berita-detail-lead reveal">{article.excerpt}</p>
+              )}
+
+              {paragraphs.length > 0 ? (
+                <div className="berita-detail-content reveal">
+                  {paragraphs.map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+                </div>
+              ) : (
+                <p className="admin-empty-note berita-detail-content-empty">
+                  Isi artikel ini belum ditambahkan. Buka <b>/admin/berita</b>{" "}
+                  untuk melengkapi bagian "Isi Berita".
+                </p>
+              )}
             </>
           )}
         </div>

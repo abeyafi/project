@@ -575,3 +575,17 @@ kartu Bidang), bukan cuma ke atas section secara umum.
   Publikasi & Prestasi 100→300, Berita 60→150.
 
 Tidak ada migrasi SQL untuk ini — murni perubahan kode.
+
+## Halaman detail Berita — gaya situs berita sungguhan
+
+- **Kalau isi artikel kosong**, sekarang tampil pesan jelas
+  ("Isi artikel ini belum ditambahkan...") — bukan area kosong yang
+  bikin bingung apakah itu bug atau memang belum diisi.
+- Konten dipecah jadi paragraf yang rapi (bukan satu blok teks polos)
+  dengan **drop cap** (huruf besar di awal paragraf pertama, ciri khas
+  situs berita/majalah).
+- **Excerpt/ringkasan** kalau diisi, tampil sebagai lead paragraph
+  besar di atas isi utama.
+- **Byline info**: nama penulis (diambil dari akun admin yang membuat
+  artikel), tanggal terbit, dan estimasi waktu baca — dipisah garis
+  tipis dari judul, gaya khas artikel berita.
